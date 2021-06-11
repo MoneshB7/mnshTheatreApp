@@ -1,0 +1,101 @@
+﻿@model mnshTheatreApp.Models.movieModel
+@{
+    ViewData["Title"] = "Booking Confirmation";
+}
+
+<div class="jumbotron">
+    <h1 class="text.center">Booking Successful</h1>
+</div>
+@*<h1>Currently Screening</h1>*@
+
+<div>
+    <img src="@Url.Content(@Model.QRCodeImage.ToString())" style="height:250px;width:200px;" />
+</div>
+
+<table class="table table-bordered">
+    <thead class="thead-light">
+        <tr>
+            <th>
+                Movie Title
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Average Rating
+            </th>
+            <th>
+                Language
+            </th>
+            <th>
+                No of Seats
+            </th>
+            <th>
+                Location
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+
+            <td>
+                @Model.MovieName
+            </td>
+            <td>
+                @Model.Description
+            </td>
+            <td>
+                @Model.AverageRating
+            </td>
+            <td>
+                @Model.Language
+            </td>
+            <td>
+                @Model.SeatNo
+            </td>
+            <th>
+                @Model.Location
+            </th>
+        </tr>
+    </tbody>
+</table>
+<div>
+    @*<a asp-action="SendEmail" asp-route-id="@Model.EmailID">Email Ticket</a>*@
+    <button id="EmailTicket">Email Ticket</button>
+</div>
+<div>
+    <div>
+        <a asp-action="Index">Back to Home</a>
+    </div>
+
+    </div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+    $(function () {
+
+        $('#EmailTicket').click(function () {
+            debugger;
+            var model = {
+
+                EmailID: '@Model.EmailID',
+                MovieName: '@Model.MovieName',
+                Description: '@Model.Description',
+                Language: '@Model.Language',
+                Location: '@Model.Location',
+                Name: '@Model.Name',
+                SeatNo: '@Model.SeatNo'
+            }
+
+            $.ajax({
+                type: 'POST',
+                contentType: "application/json; charset-utf-8",
+                data: { emailData: "model" },
+                url: '@Url.Action("SendEmail","movie")?EmailId='+'@Model.EmailID'+'&MovieName='+'@Model.MovieName'+'&Genre='+'@Model.Description'+'&Language='+'@Model.Language'+'&Location='+'@Model.Location'+'&Name='+'@Model.Name'+'&SeatNo='+'@Model.SeatNo'+'&QRCode='+'@Model.QRCodeImage',
+                success: function (result) {
+                    alert("Ticket sent to Email.");
+                }
+            })
+        })
+    })
+</script>
